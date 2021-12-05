@@ -81,6 +81,12 @@
         videoId: getVideoId(window.location.href),
       },
       function (response) {
+        if (response === false){
+          cLog("response from youtube:");
+          cLog("Creator has opted to hide likes and dislikes");
+          statsSet = true;
+          return;
+        }
         if (response != undefined) {
           cLog("response from youtube:");
           cLog(JSON.stringify(response));
@@ -99,25 +105,25 @@
       }
     );
 
-    chrome.runtime.sendMessage(
-      extensionId,
-      {
-        message: "set_state",
-        videoId: getVideoId(window.location.href),
-        state: getState().current,
-      },
-      function (response) {
-        cLog("response from api:");
-        cLog(JSON.stringify(response));
-        if (response != undefined && !statsSet) {
-          const formattedDislike = numberFormat(response.dislikes);
-          // setLikes(response.likes);
-          setDislikes(formattedDislike);
-          createRateBar(response.likes, response.dislikes);
-        } else {
-        }
-      }
-    );
+    // chrome.runtime.sendMessage(
+    //   extensionId,
+    //   {
+    //     message: "set_state",
+    //     videoId: getVideoId(window.location.href),
+    //     state: getState().current,
+    //   },
+    //   function (response) {
+    //     cLog("response from api:");
+    //     cLog(JSON.stringify(response));
+    //     if (response != undefined && !statsSet) {
+    //       const formattedDislike = numberFormat(response.dislikes);
+    //       // setLikes(response.likes);
+    //       setDislikes(formattedDislike);
+    //       createRateBar(response.likes, response.dislikes);
+    //     } else {
+    //     }
+    //   }
+    // );
   }
 
   function likeClicked() {
